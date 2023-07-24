@@ -52,25 +52,24 @@ resource "aws_route" "ngw" {
 }
 
 resource "aws_vpc_peering_connection" "peer" {
-  vpc_id        = aws_vpc.main.id
   peer_vpc_id   = var.default_vpc_id
-  peer_owner_id = data.aws_caller_identity.identity.account_id
+  vpc_id        = aws_vpc.main.id
   auto_accept = true
 
 }
 
-resource "aws_route" "peering-connection-route" {
-  count = length(local.all_private_subnet_ids)
-  route_table_id = element(local.all_private_subnet_ids, count.index )
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
-  destination_cidr_block = var.cidr_block
-}
-
-resource "aws_route" "peering-connection-route-in-default-vpc" {
-  route_table_id = var.default_vpc_rtid
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
-  destination_cidr_block = var.cidr_block
-}
+#resource "aws_route" "peering-connection-route" {
+#  count = length(local.all_private_subnet_ids)
+#  route_table_id = element(local.all_private_subnet_ids, count.index )
+#  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+#  destination_cidr_block = var.cidr_block
+#}
+#
+#resource "aws_route" "peering-connection-route-in-default-vpc" {
+#  route_table_id = var.default_vpc_rtid
+#  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+#  destination_cidr_block = var.cidr_block
+#}
 
 
 
